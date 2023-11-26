@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 //import { Link } from "react-router-dom";
 
 //svg 파일들 임포트
@@ -11,48 +11,43 @@ import { ReactComponent as Dice6 } from "../assets/Dice6.svg";
 import { ReactComponent as Timer } from "../assets/Timer.svg";
 
 function InGame() {
+  const [result, setResult] = useState(null);
   const [gameData, setGameData] = useState({
-    myData: {
-      userName: "nickname",
-      rollCount: 3,
-      total: 0,
-      myTable: {
-        aces: 0,
-        twos: 0,
-        threes: 0,
-        fours: 0,
-        fives: 0,
-        sixes: 0,
-        bonus: 0,
-        choice: 0,
-        fourK: 0,
-        fullH: 0,
-        sStr: 0,
-        lStr: 0,
-        yacht: 0,
-      },
-    },
-    oppData: {
-      userName: "nickname",
-      rollCount: 3,
-      total: 0,
-      oppTable: {
-        aces: 0,
-        twos: 0,
-        threes: 0,
-        fours: 0,
-        fives: 0,
-        sixes: 0,
-        bonus: 0,
-        choice: 0,
-        fourK: 0,
-        fullH: 0,
-        sStr: 0,
-        lStr: 0,
-        yacht: 0,
-      },
-    },
+    myName: "myname",
+    oppName: "oppname",
+    turn: "host",
+    rollCount: 3,
     dices: [0, 0, 0, 0, 0],
+    myTable: {
+      aces: null,
+      twos: null,
+      threes: null,
+      fours: null,
+      fives: null,
+      sixes: null,
+      choice: null,
+      fourK: null,
+      fullH: null,
+      sStr: null,
+      lStr: null,
+      yacht: null,
+      total: 0,
+    },
+    oppTable: {
+      aces: 0,
+      twos: 0,
+      threes: 0,
+      fours: 0,
+      fives: 0,
+      sixes: 0,
+      choice: 0,
+      fourK: 0,
+      fullH: 0,
+      sStr: 0,
+      lStr: 0,
+      yacht: 0,
+      total: 0,
+    },
     tempTable: {
       aces: 0,
       twos: 0,
@@ -60,7 +55,6 @@ function InGame() {
       fours: 0,
       fives: 0,
       sixes: 0,
-      bonus: 0,
       choice: 0,
       fourK: 0,
       fullH: 0,
@@ -69,6 +63,40 @@ function InGame() {
       yacht: 0,
     },
   });
+
+  useEffect(() => {
+    setupGame();
+  }, []);
+
+  useEffect(() => {
+    if (checkWin()) {
+      if (gameData.myTable.total > gameData.oppTable.total) {
+        setResult(1);
+      } else if (gameData.myTable.total == gameData.oppTable.total) {
+        setResult(2);
+      } else if (gameData.myTable.total < gameData.oppTable.total) {
+        setResult(0);
+      }
+    }
+  }, [gameData]);
+
+  const setupGame = () => {
+    setGameData({ ...gameData, myName: localStorage.getItem("nickname") });
+  };
+
+  const checkWin = () => {
+    for (let key in gameData.myTable) {
+      if (gameData.myTable[key] === null) {
+        return false;
+      }
+    }
+    for (let key in gameData.oppTable) {
+      if (gameData.oppTable[key] === null) {
+        return false;
+      }
+    }
+    return true;
+  };
 
   const onRoll = () => {
     let newRandomDices = [0, 0, 0, 0, 0];
@@ -175,6 +203,18 @@ function InGame() {
     return newTempTable;
   };
 
+  const setTable = (scorename) => {
+    setGameData({
+      ...gameData,
+      turn: "guest",
+      myTable: {
+        ...gameData.myTable,
+        [scorename]: gameData.tempTable[scorename],
+        total: gameData.myTable.total + gameData.tempTable[scorename],
+      },
+    });
+  };
+
   //컴포넌트로 num을 props로 받아서 사용
   const CreateDice = ({ num }) => {
     switch (num) {
@@ -195,16 +235,49 @@ function InGame() {
     }
   };
 
-  const TableCell = ({ scorename, score }) => {
+  const TableCellMy = ({ scorename }) => {
     return (
       <div className="flex flex-col">
         <div className="flex flex-row w-full h-10">
           <div className="flex flex-row justify-center items-center bg-primary w-1/2 text-secondary">
             {scorename}
           </div>
-          <div className="flex flex-row justify-center items-center bg-gray-200 w-1/2 text-secondary hover:bg-primaryHover">
-            {score}
+          {gameData.myTable[scorename] === null && gameData.turn === "host" ? (
+            <button
+              type="button"
+              className="flex flex-row justify-center items-center bg-gray-200 w-1/2 text-secondary hover:bg-primaryHover"
+              onClick={() => {
+                setTable(scorename);
+              }}
+            >
+              {gameData.tempTable[scorename]}
+            </button>
+          ) : (
+            <div className="flex flex-row justify-center items-center bg-green-200 w-1/2 text-secondary">
+              {gameData.myTable[scorename]}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  const TableCellOpp = ({ scorename }) => {
+    return (
+      <div className="flex flex-col">
+        <div className="flex flex-row w-full h-10">
+          <div className="flex flex-row justify-center items-center bg-primary w-1/2 text-secondary">
+            {scorename}
           </div>
+          {gameData.oppTable[scorename] === null ? (
+            <div className="flex flex-row justify-center items-center bg-gray-200 w-1/2 text-secondary">
+              {null}
+            </div>
+          ) : (
+            <div className="flex flex-row justify-center items-center bg-green-200 w-1/2 text-secondary">
+              {gameData.oppTable[scorename]}
+            </div>
+          )}
         </div>
       </div>
     );
@@ -215,23 +288,21 @@ function InGame() {
       <div className="bg-secondary w-52 h-full rounded-2xl shadow-2xl text-xl font-semibold leading-6 text-white">
         <div className="flex flex-row justify-evenly items-center h-16 w-full">
           <div className="w-10 h-10 rounded-full bg-gray-400"></div>
-          UserName
+          {gameData.myName}
         </div>
-        <TableCell scorename={"aces"} score={gameData.tempTable.aces} />
-        <TableCell scorename={"twos"} score={gameData.tempTable.twos} />
-        <TableCell scorename={"threes"} score={gameData.tempTable.threes} />
-        <TableCell scorename={"fours"} score={gameData.tempTable.fours} />
-        <TableCell scorename={"fives"} score={gameData.tempTable.fives} />
-        <TableCell scorename={"sixes"} score={gameData.tempTable.sixes} />
-        <TableCell scorename={"Choice"} score={gameData.tempTable.choice} />
-        <TableCell scorename={"4 of a Kind"} score={gameData.tempTable.fourK} />
-        <TableCell scorename={"Full House"} score={gameData.tempTable.fullH} />
-        <TableCell scorename={"S.Straight"} score={gameData.tempTable.sStr} />
-        <TableCell scorename={"L.Straight"} score={gameData.tempTable.lStr} />
-        <TableCell scorename={"Yacht"} score={gameData.tempTable.yacht} />
-        <div className="flex flex-row justify-evenly items-center h-16 w-full">
-          Total:
-        </div>
+        <TableCellMy scorename={"aces"} />
+        <TableCellMy scorename={"twos"} />
+        <TableCellMy scorename={"threes"} />
+        <TableCellMy scorename={"fours"} />
+        <TableCellMy scorename={"fives"} />
+        <TableCellMy scorename={"sixes"} />
+        <TableCellMy scorename={"choice"} />
+        <TableCellMy scorename={"fourK"} />
+        <TableCellMy scorename={"fullH"} />
+        <TableCellMy scorename={"sStr"} />
+        <TableCellMy scorename={"lStr"} />
+        <TableCellMy scorename={"yacht"} />
+        <TableCellMy scorename={"total"} />
       </div>
       <div className="flex flex-col justify-between items-center h-full">
         <Timer width={40} height={40} />
@@ -243,32 +314,60 @@ function InGame() {
             ))}
           </div>
         </div>
+        {gameData.turn === "host" ? (
+          <button
+            type="button"
+            className="flex w-40 h-10 justify-center items-center rounded-full bg-secondary px-3 py-1.5 text-xl font-semibold leading-6 text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            onClick={() => {
+              onRoll();
+            }}
+          >
+            ROLL
+          </button>
+        ) : (
+          <div
+            type="button"
+            className="flex w-40 h-10 justify-center items-center rounded-full bg-gray-400 px-3 py-1.5 text-xl font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            WAIT
+          </div>
+        )}
+
         <button
           type="button"
           className="flex w-40 h-10 justify-center items-center rounded-full bg-secondary px-3 py-1.5 text-xl font-semibold leading-6 text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          onClick={onRoll}
+          onClick={() => {
+            setGameData({
+              ...gameData,
+              turn: "host",
+            });
+          }}
         >
-          ROLL
+          turn over
         </button>
       </div>
       <div className="bg-secondary w-52 h-full rounded-2xl shadow-2xl text-xl font-semibold leading-6 text-white">
         <div className="flex flex-row justify-evenly items-center h-16 w-full">
           <div className="w-10 h-10 rounded-full bg-gray-400"></div>
-          UserName
+          {gameData.oppName}
         </div>
-        <TableCell scorename={"aces"} score={gameData.tempTable.aces} />
-        <TableCell scorename={"twos"} score={gameData.tempTable.twos} />
-        <TableCell scorename={"threes"} score={gameData.tempTable.threes} />
-        <TableCell scorename={"fours"} score={gameData.tempTable.fours} />
-        <TableCell scorename={"fives"} score={gameData.tempTable.fives} />
-        <TableCell scorename={"sixes"} score={gameData.tempTable.sixes} />
-        <TableCell scorename={"Choice"} score={gameData.tempTable.choice} />
-        <TableCell scorename={"4 of a Kind"} score={gameData.tempTable.fourK} />
-        <TableCell scorename={"Full House"} score={gameData.tempTable.fullH} />
-        <TableCell scorename={"S.Straight"} score={gameData.tempTable.sStr} />
-        <TableCell scorename={"L.Straight"} score={gameData.tempTable.lStr} />
-        <TableCell scorename={"Yacht"} score={gameData.tempTable.yacht} />
+        <TableCellOpp scorename={"aces"} />
+        <TableCellOpp scorename={"twos"} />
+        <TableCellOpp scorename={"threes"} />
+        <TableCellOpp scorename={"fours"} />
+        <TableCellOpp scorename={"fives"} />
+        <TableCellOpp scorename={"sixes"} />
+        <TableCellOpp scorename={"choice"} />
+        <TableCellOpp scorename={"fourK"} />
+        <TableCellOpp scorename={"fullH"} />
+        <TableCellOpp scorename={"sStr"} />
+        <TableCellOpp scorename={"lStr"} />
+        <TableCellOpp scorename={"yacht"} />
+        <TableCellOpp scorename={"total"} />
       </div>
+      {result === 1 && <div>win</div>}
+      {result === 0 && <div>lose</div>}
+      {result === 2 && <div>draw</div>}
     </div>
   );
 }

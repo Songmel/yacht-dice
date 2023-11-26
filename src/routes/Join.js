@@ -1,16 +1,15 @@
-/*
-import { useState } from "react";
-import { over } from "stompjs";
-import SockJS from "sockjs-client";
-*/
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 function Join() {
+  useEffect(() => {
+    setMyData(localStorage.getItem("nickname"));
+  }, []);
+  const [myData, setMyData] = useState("");
   return (
     <div className="flex flex-col justify-evenly items-center w-80 h-160 p-5 bg-white rounded-3xl shadow-2xl">
       <div className="flex flex-col items-center">
         <div className="w-24 h-24 mb-3 rounded-full bg-gray-400"></div>
-        <span className="mb-20 text-secondary">Nickname</span>
+        <span className="mb-20 text-secondary">{myData}</span>
       </div>
       <div className="flex flex-col items-center">
         <button
