@@ -45,15 +45,13 @@ function Lobby() {
         />
       </div>
       <div className="flex flex-col items-center">
-        <Link to="/Join">
-          <button
-            type="button"
-            className="flex w-40 h-10 mb-3 justify-center items-center rounded-full bg-primary px-3 py-1.5 text-xl font-semibold leading-6 text-white shadow-sm hover:bg-primaryHover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            onClick={getUserinfo}
-          >
-            Join
-          </button>
-        </Link>
+        <button
+          type="button"
+          className="flex w-40 h-10 mb-3 justify-center items-center rounded-full bg-gray-400 px-3 py-1.5 text-xl font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          onClick={getUserinfo}
+        >
+          Join
+        </button>
 
         <Link to="/Matchup">
           <button

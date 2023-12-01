@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Login from "./routes/Login";
+import Kakao from "./routes/Kakao";
 import Lobby from "./routes/Lobby";
 import Join from "./routes/Join";
 import Matchup from "./routes/Matchup";
@@ -23,6 +24,9 @@ function App() {
           </Route>
           <Route path="/lobby">
             <Lobby />
+          </Route>
+          <Route path="/Kakao">
+            <Kakao />
           </Route>
           <Route path="/">
             <div className="text-3xl font-semibold text-white">YACHT DICE</div>
