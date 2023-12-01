@@ -10,9 +10,9 @@ const Kakao = () => {
 
   useEffect(() => {
     console.log(code);
-    axios
+    axios //안되면 https://cors-anywhere.herokuapp.com/
       .post(
-        "https://cors-anywhere.herokuapp.com/http://ec2-13-124-246-115.ap-northeast-2.compute.amazonaws.com/api/auth/kakao",
+        "https://api.yachtdice.site/api/auth/kakao",
 
         {
           authorizationCode: code,
@@ -23,7 +23,7 @@ const Kakao = () => {
         localStorage.setItem("accessToken", r.data.accessToken);
         axios
           .get(
-            "https://cors-anywhere.herokuapp.com/http://ec2-13-124-246-115.ap-northeast-2.compute.amazonaws.com/api/members/test",
+            "https://api.yachtdice.site/api/members/test",
 
             {
               headers: {

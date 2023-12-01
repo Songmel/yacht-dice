@@ -23,9 +23,7 @@ function Matchup() {
 
   // 소켓 연결 함수
   const connect = () => {
-    let Sock = new SockJS(
-      "http://ec2-13-124-246-115.ap-northeast-2.compute.amazonaws.com/ws"
-    );
+    let Sock = new SockJS("https://api.yachtdice.site/ws");
 
     //웹소켓 객체를 받아온다
     stompClient = over(Sock);
