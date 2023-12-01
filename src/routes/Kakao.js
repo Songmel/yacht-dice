@@ -12,7 +12,7 @@ const Kakao = () => {
     console.log(code);
     axios //안되면 https://cors-anywhere.herokuapp.com/
       .post(
-        "https://api.yachtdice.site/api/auth/kakao",
+        "https://cors-anywhere.herokuapp.com/https://api.yachtdice.site/api/auth/kakao",
 
         {
           authorizationCode: code,
@@ -23,7 +23,7 @@ const Kakao = () => {
         localStorage.setItem("accessToken", r.data.accessToken);
         axios
           .get(
-            "https://api.yachtdice.site/api/members/test",
+            "https://cors-anywhere.herokuapp.com/https://api.yachtdice.site/api/members/test",
 
             {
               headers: {

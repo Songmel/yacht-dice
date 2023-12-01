@@ -96,7 +96,9 @@ function InGame() {
 
   // 소켓 연결 함수
   const connect = () => {
-    let Sock = new SockJS("https://api.yachtdice.site/ws");
+    let Sock = new SockJS(
+      "https://cors-anywhere.herokuapp.com/https://api.yachtdice.site/ws"
+    );
     stompClient = over(Sock);
     stompClient.connect(
       {

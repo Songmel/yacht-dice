@@ -23,7 +23,9 @@ function Matchup() {
 
   // 소켓 연결 함수
   const connect = () => {
-    let Sock = new SockJS("https://api.yachtdice.site/ws");
+    let Sock = new SockJS(
+      "https://cors-anywhere.herokuapp.com/https://api.yachtdice.site/ws"
+    );
 
     //웹소켓 객체를 받아온다
     stompClient = over(Sock);
