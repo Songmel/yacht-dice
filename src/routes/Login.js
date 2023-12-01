@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 function Login() {
   const REST_API_KEY = "f4b3ab15230954ce18c474013db7fe07";
-  const REDIRECT_URI = "https://yacht-dice.github.io/Kakao";
+  const REDIRECT_URI = "https://yacht-dice-ten.vercel.app/Kakao";
   const link = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
   const loginHandler = () => {
