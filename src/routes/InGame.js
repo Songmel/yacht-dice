@@ -192,6 +192,7 @@ function InGame() {
             ...oppData,
             userName: payloadData.userName,
             avatarNum: payloadData.avatarNum,
+            connected: true,
           });
           ecoJoin();
           break;
@@ -200,6 +201,7 @@ function InGame() {
             ...oppData,
             userName: payloadData.userName,
             avatarNum: payloadData.avatarNum,
+            connected: true,
           });
           break;
         case "DICE":
