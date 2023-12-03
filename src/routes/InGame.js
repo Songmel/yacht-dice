@@ -118,6 +118,7 @@ function InGame() {
       ...myData,
       userName: localStorage.getItem("nickname"),
       avatarNum: localStorage.getItem("avatarNum"),
+      connected: true,
     });
     stompClient.subscribe("/sub/games", onMessageReceived);
     newJoin();
