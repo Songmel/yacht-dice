@@ -1,6 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
+import Logo from "./assets/Logo.png";
+
 import Login from "./routes/Login";
 import Kakao from "./routes/Kakao";
 import Lobby from "./routes/Lobby";
@@ -29,7 +31,7 @@ function App() {
             <Kakao />
           </Route>
           <Route path="/">
-            <div className="text-3xl font-semibold text-white">YACHT DICE</div>
+            <img width={500} src={Logo} alt="Yacht Dice" />
             <Login />
           </Route>
         </Switch>

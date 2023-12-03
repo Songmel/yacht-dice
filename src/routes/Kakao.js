@@ -40,9 +40,7 @@ const Kakao = () => {
   return (
     <div className="flex flex-col justify-evenly items-center w-80 h-52 p-5 bg-white rounded-3xl shadow-2xl">
       <img src={Spinner} alt="로딩중" width="30%" />
-      <span className="text-3xl font-semibold text-secondary">
-        로그인 중 입니다...
-      </span>
+      <span className="text-3xl font-semibold text-secondary">Logging in</span>
     </div>
   );
 };

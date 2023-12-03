@@ -12,17 +12,24 @@ import { ReactComponent as Dice5 } from "../assets/Dice5.svg";
 import { ReactComponent as Dice6 } from "../assets/Dice6.svg";
 import { ReactComponent as Timer } from "../assets/Timer.svg";
 
+import avatar1 from "../assets/Char1.png";
+import avatar2 from "../assets/Char2.png";
+import avatar3 from "../assets/Char3.png";
+const avatarList = [avatar1, avatar2, avatar3];
+
 let stompClient = null;
 function InGame() {
   const [result, setResult] = useState(null);
   const [turn, setTurn] = useState("GUEST");
   const [myData, setMyData] = useState({
     userName: "",
+    avatarNum: 0,
     connected: false,
     message: "",
   });
   const [oppData, setOppData] = useState({
     userName: "",
+    avatarNum: 0,
     connected: false,
     message: "",
   });
@@ -120,6 +127,7 @@ function InGame() {
     let data = {
       status: "NEWJOIN",
       userName: localStorage.getItem("nickname"),
+      avatarNum: localStorage.getItem("avatarNum"),
     };
     let message = {
       message: JSON.stringify(data),
@@ -132,6 +140,7 @@ function InGame() {
     let data = {
       status: "ECOJOIN",
       userName: localStorage.getItem("nickname"),
+      avatarNum: localStorage.getItem("avatarNum"),
     };
     let message = {
       message: JSON.stringify(data),
@@ -174,11 +183,19 @@ function InGame() {
     if (payloadData.userName !== localStorage.getItem("nickname")) {
       switch (payloadData.status) {
         case "NEWJOIN":
-          setOppData({ ...oppData, userName: payloadData.userName });
+          setOppData({
+            ...oppData,
+            userName: payloadData.userName,
+            avatarNum: payloadData.avatarNum,
+          });
           ecoJoin();
           break;
         case "ECOJOIN":
-          setOppData({ ...oppData, userName: payloadData.userName });
+          setOppData({
+            ...oppData,
+            userName: payloadData.userName,
+            avatarNum: payloadData.avatarNum,
+          });
           break;
         case "DICE":
           setDices(payloadData.dices);
@@ -392,8 +409,14 @@ function InGame() {
     <div className="flex flex-row justify-between items-center w-280 h-160 p-5 bg-white rounded-3xl shadow-2xl">
       <div className="bg-secondary w-52 h-full rounded-2xl shadow-2xl text-xl font-semibold leading-6 text-white">
         <div className="flex flex-row justify-evenly items-center h-16 w-full">
-          <div className="w-10 h-10 rounded-full bg-gray-400"></div>
-          {myData.userName}
+          {myData.connected && (
+            <img
+              className="w-10"
+              src={avatarList[myData.avatarNum]}
+              alt="avatar"
+            />
+          )}
+          {myData.connected && myData.userName}
         </div>
         <TableCellMy scorename={"aces"} />
         <TableCellMy scorename={"twos"} />
@@ -442,8 +465,14 @@ function InGame() {
       </div>
       <div className="bg-secondary w-52 h-full rounded-2xl shadow-2xl text-xl font-semibold leading-6 text-white">
         <div className="flex flex-row justify-evenly items-center h-16 w-full">
-          <div className="w-10 h-10 rounded-full bg-gray-400"></div>
-          {oppData.userName}
+          {oppData.connected && (
+            <img
+              className="w-10"
+              src={avatarList[oppData.avatarNum]}
+              alt="avatar"
+            />
+          )}
+          {oppData.connected && oppData.userName}
         </div>
         <TableCellOpp scorename={"aces"} />
         <TableCellOpp scorename={"twos"} />

@@ -10,6 +10,7 @@ function Lobby() {
     setNickname(localStorage.getItem("nickname"));
   }, []);
   const [nickname, setNickname] = useState("");
+  const [avatarNum, setAvatarNum] = useState(0);
   const [avatar, setAvatar] = useState(avatar1);
   const handleInputChange = (event) => {
     setNickname(event.target.value);
@@ -17,24 +18,27 @@ function Lobby() {
   const handleAvatarChange = () => {
     if (avatar === avatar1) {
       setAvatar(avatar2);
+      setAvatarNum(1);
     } else if (avatar === avatar2) {
       setAvatar(avatar3);
+      setAvatarNum(2);
     } else if (avatar === avatar3) {
       setAvatar(avatar1);
+      setAvatarNum(0);
     }
   };
   const getUserinfo = () => {
     localStorage.setItem("nickname", nickname);
-    localStorage.setItem("avatar", avatar);
+    localStorage.setItem("avatarNum", avatarNum);
   };
   return (
     <div className="flex flex-col justify-evenly items-center w-80 h-160 p-5 bg-white rounded-3xl shadow-2xl">
       <div className="flex flex-col items-center">
         <div
-          className="w-24 h-24 mb-3 rounded-full border-4 border-secondary"
+          className="flex flex-row justify-center items-center w-28 h-28 mb-3"
           onClick={handleAvatarChange}
         >
-          <img className="-translate-y-12" src={avatar} alt="avatar" />
+          <img className="w-20 animate-bounce" src={avatar} alt="avatar" />
         </div>
         <input
           className="text-2xl text-secondary text-center border-b-2 border-secondary"
@@ -52,7 +56,6 @@ function Lobby() {
         >
           Join
         </button>
-
         <Link to="/Matchup">
           <button
             type="button"
