@@ -97,7 +97,6 @@ function InGame() {
   }, [oppTable, myTable]);
 
   const setupGame = () => {
-    setMyData({ ...myData, userName: localStorage.getItem("nickname") });
     connect();
   };
 
@@ -115,6 +114,11 @@ function InGame() {
   };
 
   const onConnected = () => {
+    setMyData({
+      ...myData,
+      userName: localStorage.getItem("nickname"),
+      avatarNum: localStorage.getItem("avatarNum"),
+    });
     stompClient.subscribe("/sub/games", onMessageReceived);
     newJoin();
   };
