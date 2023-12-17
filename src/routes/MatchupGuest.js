@@ -13,7 +13,7 @@ import avatar3 from "../assets/Char3.png";
 const avatarList = [avatar1, avatar2, avatar3];
 
 let stompClient = null;
-function Matchup() {
+function MatchupGuest() {
   useEffect(() => {
     connect();
   }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때만 실행
@@ -67,7 +67,7 @@ function Matchup() {
       connected: true,
     });
     stompClient.subscribe(
-      `/sub/games/${localStorage.getItem("roomCode")}/host`,
+      `/sub/games/${localStorage.getItem("roomCode")}`,
       onMessageReceived
     );
     //newJoin();
@@ -122,9 +122,7 @@ function Matchup() {
   //메세지 받았을 때 (payload 데이터가 들어옴)
   const onMessageReceived = (payload) => {
     let payloadMessage = JSON.parse(payload.body);
-    console.log(payloadMessage);
     let payloadData = JSON.parse(payloadMessage.message);
-    /*
     if (payloadData.userName !== localStorage.getItem("nickname")) {
       console.log(payloadData.status);
       switch (payloadData.status) {
@@ -150,7 +148,6 @@ function Matchup() {
           localStorage.setItem("isHost", false);
       }
     }
-    */
   };
   return (
     <div className="flex flex-row justify-between items-center w-280 h-160 p-5 bg-white rounded-3xl shadow-2xl">
@@ -212,4 +209,4 @@ function Matchup() {
   );
 }
 
-export default Matchup;
+export default MatchupGuest;

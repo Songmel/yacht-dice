@@ -46,6 +46,7 @@ function Lobby() {
       )
       .then((r) => {
         console.log(r.data);
+        localStorage.setItem("userId", r.data.userId);
         navigate.push("/Matchup");
       });
   };
