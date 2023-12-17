@@ -38,7 +38,6 @@ function Lobby() {
         {
           nickname: nickname,
         },
-
         {
           headers: {
             Authorization: `Bearer ${r.data.accessToken}`,
