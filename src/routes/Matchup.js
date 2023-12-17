@@ -35,7 +35,7 @@ function Matchup() {
   const connect = () => {
     axios
       .get("https://api.yachtdice.site/api/rooms/code", {
-        Authorization: `${localStorage.getItem("accessToken")}`,
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       })
       .then((r) => {
         console.log(r.data);
