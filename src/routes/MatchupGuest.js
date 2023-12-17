@@ -59,7 +59,7 @@ function MatchupGuest() {
       `/sub/games/${localStorage.getItem("roomCode")}/guest`,
       onMessageReceived
     );
-    newJoin();
+    //newJoin();
   };
 
   const onError = (err) => {
@@ -68,7 +68,7 @@ function MatchupGuest() {
 
   const newJoin = () => {
     //메세지 객체 생성
-    let data = "asdfg";
+    let data = null;
 
     //(url, header, body(string))
     stompClient.send(
