@@ -7,6 +7,7 @@ function Login() {
 
   const loginHandler = () => {
     window.location.href = link;
+    window.localStorage.clear();
   };
   return (
     <div className="flex flex-col justify-between items-center w-80 h-52 p-5 bg-white rounded-3xl shadow-2xl">

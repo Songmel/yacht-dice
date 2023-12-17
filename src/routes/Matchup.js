@@ -121,9 +121,8 @@ function Matchup() {
   };
   //메세지 받았을 때 (payload 데이터가 들어옴)
   const onMessageReceived = (payload) => {
-    let payloadMessage = JSON.parse(payload.body);
-    console.log(payloadMessage);
-    let payloadData = JSON.parse(payloadMessage.message);
+    let payloadData = JSON.parse(payload.body);
+    console.log(payloadData);
     /*
     if (payloadData.userName !== localStorage.getItem("nickname")) {
       console.log(payloadData.status);

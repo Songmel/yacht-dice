@@ -29,7 +29,7 @@ function Lobby() {
       setAvatarNum(0);
     }
   };
-  const getUserinfo = () => {
+  const handleHost = () => {
     localStorage.setItem("nickname", nickname);
     localStorage.setItem("avatarNum", avatarNum);
     axios
@@ -50,6 +50,29 @@ function Lobby() {
         navigate.push("/Matchup");
       });
   };
+
+  const handleJoin = () => {
+    localStorage.setItem("nickname", nickname);
+    localStorage.setItem("avatarNum", avatarNum);
+    axios
+      .post(
+        "https://api.yachtdice.site/api/members/nickname",
+        {
+          nickname: nickname,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      )
+      .then((r) => {
+        console.log(r.data);
+        localStorage.setItem("userId", r.data.userId);
+        navigate.push("/Join");
+      });
+  };
+
   return (
     <div className="flex flex-col justify-evenly items-center w-80 h-160 p-5 bg-white rounded-3xl shadow-2xl">
       <div className="flex flex-col items-center">
@@ -70,15 +93,15 @@ function Lobby() {
       <div className="flex flex-col items-center">
         <button
           type="button"
-          className="flex w-40 h-10 mb-3 justify-center items-center rounded-full bg-gray-400 px-3 py-1.5 text-xl font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          onClick={getUserinfo}
+          className="flex w-40 h-10 mb-3 justify-center items-center rounded-full bg-secondary px-3 py-1.5 text-xl font-semibold leading-6 text-white shadow-sm hover:bg-secondarytHover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          onClick={handleJoin}
         >
           Join
         </button>
         <button
           type="button"
           className="flex w-40 h-10 mb-3 justify-center items-center rounded-full bg-secondary px-3 py-1.5 text-xl font-semibold leading-6 text-white shadow-sm hover:bg-secondarytHover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          onClick={getUserinfo}
+          onClick={handleHost}
         >
           Host
         </button>

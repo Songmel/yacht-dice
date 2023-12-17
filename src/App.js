@@ -8,6 +8,7 @@ import Kakao from "./routes/Kakao";
 import Lobby from "./routes/Lobby";
 import Join from "./routes/Join";
 import Matchup from "./routes/Matchup";
+import MatchupGuest from "./routes/MatchupGuest";
 import InGame from "./routes/InGame";
 
 function App() {
@@ -17,6 +18,9 @@ function App() {
         <Switch>
           <Route path="/InGame">
             <InGame />
+          </Route>
+          <Route path="/MatchupGuest">
+            <MatchupGuest />
           </Route>
           <Route path="/Matchup">
             <Matchup />
