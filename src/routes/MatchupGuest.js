@@ -56,10 +56,10 @@ function MatchupGuest() {
       connected: true,
     });
     stompClient.subscribe(
-      `/pub/games/${localStorage.getItem("roomCode")}/join`,
+      `/sub/games/${localStorage.getItem("roomCode")}`,
       onMessageReceived
     );
-    //newJoin();
+    newJoin();
   };
 
   const onError = (err) => {
@@ -68,18 +68,14 @@ function MatchupGuest() {
 
   const newJoin = () => {
     //메세지 객체 생성
-    let data = {
-      status: "NEWJOIN",
-      userName: localStorage.getItem("nickname"),
-      avatarNum: localStorage.getItem("avatarNum"),
-    };
-
-    let message = {
-      message: JSON.stringify(data),
-    };
+    let data = "asdfg";
 
     //(url, header, body(string))
-    stompClient.send("/pub/games", {}, JSON.stringify(message));
+    stompClient.send(
+      `/pub/games/${localStorage.getItem("roomCode")}/join`,
+      {},
+      data
+    );
   };
 
   const ecoJoin = () => {
