@@ -56,7 +56,7 @@ function MatchupGuest() {
       connected: true,
     });
     stompClient.subscribe(
-      `/sub/games/${localStorage.getItem("roomCode")}/join`,
+      `/pub/games/${localStorage.getItem("roomCode")}/join`,
       onMessageReceived
     );
     //newJoin();
