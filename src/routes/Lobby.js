@@ -40,7 +40,7 @@ function Lobby() {
         },
         {
           headers: {
-            Authorization: `Bearer ${r.data.accessToken}`,
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           },
         }
       )
