@@ -98,7 +98,7 @@ function MatchupGuest() {
   const onMessageReceived = (payload) => {
     let payloadData = JSON.parse(payload.body);
     console.log(payloadData);
-    switch (payloadData[0].status) {
+    switch (payloadData.status) {
       case "HOST":
         setOppData({
           ...oppData,
@@ -107,6 +107,9 @@ function MatchupGuest() {
           connected: true,
         });
         break;
+      case "PLAYING":
+        navigate.push("/InGame");
+        localStorage.setItem("isHost", false);
     }
   };
   return (
@@ -124,30 +127,6 @@ function MatchupGuest() {
         <span className="text-2xl mb-20 text-secondary">
           {myData.connected ? myData.userName : "Connecting..."}
         </span>
-        <button
-          type="button"
-          className="flex w-80 h-10 mb-3 justify-center items-center rounded-full bg-primary px-3 py-1.5 text-xl font-semibold leading-6 text-white shadow-sm hover:bg-primaryHover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-        >
-          Room Code: A12BE3
-        </button>
-        {myData.connected && oppData.connected ? (
-          <Link to="/InGame">
-            <button
-              type="button"
-              className="flex w-40 h-10 mb-3 justify-center items-center rounded-full bg-secondary px-3 py-1.5 text-xl font-semibold leading-6 text-white shadow-sm hover:bg-secondarytHover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              onClick={onPlay}
-            >
-              Play!
-            </button>
-          </Link>
-        ) : (
-          <div
-            type="button"
-            className="flex w-40 h-10 mb-3 justify-center items-center rounded-full bg-gray-400 px-3 py-1.5 text-xl font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            Play!
-          </div>
-        )}
       </div>
       {oppData.connected ? (
         <div className="flex flex-col items-center w-1/2">

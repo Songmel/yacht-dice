@@ -16,8 +16,10 @@ let stompClient = null;
 function Matchup() {
   useEffect(() => {
     connect();
+    setRoomCode(localStorage.getItem("roomCode"));
   }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때만 실행
   const navigate = useHistory();
+  const [roomCode, setRoomCode] = useState("");
   const [myData, setMyData] = useState({
     userName: "",
     avatarNum: 0,
@@ -102,14 +104,6 @@ function Matchup() {
         });
         break;
     }
-
-    /*
-        case "PLAY":
-          navigate.push("/InGame");
-          localStorage.setItem("isHost", false);
-      }
-    }
-    */
   };
   return (
     <div className="flex flex-row justify-between items-center w-280 h-160 p-5 bg-white rounded-3xl shadow-2xl">
@@ -130,7 +124,7 @@ function Matchup() {
           type="button"
           className="flex w-80 h-10 mb-3 justify-center items-center rounded-full bg-primary px-3 py-1.5 text-xl font-semibold leading-6 text-white shadow-sm hover:bg-primaryHover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
-          Room Code: A12BE3
+          Room Code: {roomCode}
         </button>
         {myData.connected && oppData.connected ? (
           <Link to="/InGame">
