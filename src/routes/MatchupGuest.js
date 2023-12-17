@@ -56,7 +56,7 @@ function MatchupGuest() {
       connected: true,
     });
     stompClient.subscribe(
-      `/sub/games/${localStorage.getItem("roomCode")}`,
+      `/sub/games/${localStorage.getItem("roomCode")}/guest`,
       onMessageReceived
     );
     newJoin();
@@ -72,7 +72,7 @@ function MatchupGuest() {
 
     //(url, header, body(string))
     stompClient.send(
-      `/pub/games/${localStorage.getItem("roomCode")}/join`,
+      `/pub/games/${localStorage.getItem("roomCode")}/guest`,
       {},
       data
     );
