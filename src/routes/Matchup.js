@@ -77,73 +77,33 @@ function Matchup() {
     console.log(err);
   };
 
-  const newJoin = () => {
-    //메세지 객체 생성
-    let data = {
-      status: "NEWJOIN",
-      userName: localStorage.getItem("nickname"),
-      avatarNum: localStorage.getItem("avatarNum"),
-    };
-
-    let message = {
-      message: JSON.stringify(data),
-    };
-
-    //(url, header, body(string))
-    stompClient.send("/pub/games", {}, JSON.stringify(message));
-  };
-
-  const ecoJoin = () => {
-    //메세지 객체 생성
-    let data = {
-      status: "ECOJOIN",
-      userName: localStorage.getItem("nickname"),
-      avatarNum: localStorage.getItem("avatarNum"),
-    };
-    let message = {
-      message: JSON.stringify(data),
-    };
-    //(url, header, body(string))
-    stompClient.send("/pub/games", {}, JSON.stringify(message));
-  };
-
   const onPlay = () => {
     //메세지 객체 생성
-    let data = {
-      status: "PLAY",
-    };
-    let message = {
-      message: JSON.stringify(data),
-    };
+    let data = null;
     //(url, header, body(string))
-    stompClient.send("/pub/games", {}, JSON.stringify(message));
+    stompClient.send(
+      `/pub/games/${localStorage.getItem("roomCode")}/host`,
+      {},
+      data
+    );
     localStorage.setItem("isHost", true);
   };
   //메세지 받았을 때 (payload 데이터가 들어옴)
   const onMessageReceived = (payload) => {
     let payloadData = JSON.parse(payload.body);
     console.log(payloadData);
+    switch (payloadData.status) {
+      case "GUEST":
+        setOppData({
+          ...oppData,
+          userName: payloadData.nickname,
+          avatarNum: 0,
+          connected: true,
+        });
+        break;
+    }
+
     /*
-    if (payloadData.userName !== localStorage.getItem("nickname")) {
-      console.log(payloadData.status);
-      switch (payloadData.status) {
-        case "NEWJOIN":
-          setOppData({
-            ...oppData,
-            userName: payloadData.userName,
-            avatarNum: payloadData.avatarNum,
-            connected: true,
-          });
-          ecoJoin();
-          break;
-        case "ECOJOIN":
-          setOppData({
-            ...oppData,
-            userName: payloadData.userName,
-            avatarNum: payloadData.avatarNum,
-            connected: true,
-          });
-          break;
         case "PLAY":
           navigate.push("/InGame");
           localStorage.setItem("isHost", false);
