@@ -120,7 +120,10 @@ function InGame() {
       avatarNum: localStorage.getItem("avatarNum"),
       connected: true,
     });
-    stompClient.subscribe("/sub/games", onMessageReceived);
+    stompClient.subscribe(
+      `/sub/games/${localStorage.getItem("roomCode")}`,
+      onMessageReceived
+    );
     newJoin();
   };
 
@@ -138,7 +141,11 @@ function InGame() {
       message: JSON.stringify(data),
     };
 
-    stompClient.send("/pub/games", {}, JSON.stringify(message));
+    stompClient.send(
+      `/pub/games/${localStorage.getItem("roomCode")}`,
+      {},
+      JSON.stringify(message)
+    );
   };
 
   const ecoJoin = () => {
@@ -151,7 +158,11 @@ function InGame() {
       message: JSON.stringify(data),
     };
 
-    stompClient.send("/pub/games", {}, JSON.stringify(message));
+    stompClient.send(
+      `/pub/games/${localStorage.getItem("roomCode")}`,
+      {},
+      JSON.stringify(message)
+    );
     setTurn("HOST");
   };
 
@@ -165,7 +176,11 @@ function InGame() {
       message: JSON.stringify(data),
     };
     //(url, header, body(string))
-    stompClient.send("/pub/games", {}, JSON.stringify(message));
+    stompClient.send(
+      `/pub/games/${localStorage.getItem("roomCode")}`,
+      {},
+      JSON.stringify(message)
+    );
   };
 
   const updateTable = (newTable) => {
@@ -178,7 +193,11 @@ function InGame() {
       message: JSON.stringify(data),
     };
     //(url, header, body(string))
-    stompClient.send("/pub/games", {}, JSON.stringify(message));
+    stompClient.send(
+      `/pub/games/${localStorage.getItem("roomCode")}`,
+      {},
+      JSON.stringify(message)
+    );
   };
 
   //메세지 받았을 때 (payload 데이터가 들어옴)
