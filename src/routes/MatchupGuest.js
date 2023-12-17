@@ -102,7 +102,7 @@ function MatchupGuest() {
       case "HOST":
         setOppData({
           ...oppData,
-          userName: payloadData[0].nickname,
+          userName: payloadData.nickname,
           avatarNum: 0,
           connected: true,
         });

@@ -16,7 +16,6 @@ let stompClient = null;
 function Matchup() {
   useEffect(() => {
     connect();
-    setRoomCode(localStorage.getItem("roomCode"));
   }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때만 실행
   const navigate = useHistory();
   const [roomCode, setRoomCode] = useState("");
@@ -44,6 +43,7 @@ function Matchup() {
       .then((r) => {
         console.log(r.data);
         localStorage.setItem("roomCode", r.data);
+        setRoomCode(r.data);
 
         let Sock = new SockJS("https://api.yachtdice.site/ws");
 
