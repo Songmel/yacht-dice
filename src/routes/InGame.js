@@ -85,6 +85,10 @@ function InGame() {
   }, []);
 
   useEffect(() => {
+    setRollCount(3);
+  }, [turn]);
+
+  useEffect(() => {
     if (checkWin()) {
       if (myTable.total > oppTable.total) {
         setResult(1);
@@ -258,6 +262,9 @@ function InGame() {
     updateDice([...newRandomDices]);
     //비동기 오류로 dice 값까지 한번에 state 변경함
     setDices([...newRandomDices]);
+    setRollCount((prev) => {
+      return prev - 1;
+    });
     setTempTable(calcTempTable(newRandomDices));
   };
 
@@ -469,8 +476,37 @@ function InGame() {
             <CreateDice num={dices[3]} />
             <CreateDice num={dices[4]} />
           </div>
+          {rollCount === 3 && (
+            <div className="flex flex-row gap-x-3">
+              <div className="w-3 h-3 bg-secondary rounded-full"></div>
+              <div className="w-3 h-3 bg-secondary rounded-full"></div>
+              <div className="w-3 h-3 bg-secondary rounded-full"></div>
+            </div>
+          )}
+          {rollCount === 2 && (
+            <div className="flex flex-row gap-x-3">
+              <div className="w-3 h-3 bg-secondary rounded-full"></div>
+              <div className="w-3 h-3 bg-secondary rounded-full"></div>
+              <div className="w-3 h-3 bg-slate-400 rounded-full"></div>
+            </div>
+          )}
+          {rollCount === 1 && (
+            <div className="flex flex-row gap-x-3">
+              <div className="w-3 h-3 bg-secondary rounded-full"></div>
+              <div className="w-3 h-3 bg-slate-400 rounded-full"></div>
+              <div className="w-3 h-3 bg-slate-400 rounded-full"></div>
+            </div>
+          )}
+          {rollCount === 0 && (
+            <div className="flex flex-row gap-x-3">
+              <div className="w-3 h-3 bg-slate-400 rounded-full"></div>
+              <div className="w-3 h-3 bg-slate-400 rounded-full"></div>
+              <div className="w-3 h-3 bg-slate-400 rounded-full"></div>
+            </div>
+          )}
         </div>
-        {turn === "HOST" ? (
+
+        {turn === "HOST" && rollCount !== 0 ? (
           <button
             type="button"
             className="flex w-40 h-10 justify-center items-center rounded-full bg-secondary px-3 py-1.5 text-xl font-semibold leading-6 text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
