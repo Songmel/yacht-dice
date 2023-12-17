@@ -33,30 +33,19 @@ function MatchupGuest() {
 
   // 소켓 연결 함수
   const connect = () => {
-    axios
-      .get("https://api.yachtdice.site/api/rooms/code", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      })
-      .then((r) => {
-        console.log(r.data);
-        localStorage.setItem("roomCode", r.data);
+    let Sock = new SockJS("https://api.yachtdice.site/ws");
 
-        let Sock = new SockJS("https://api.yachtdice.site/ws");
+    //웹소켓 객체를 받아온다
+    stompClient = over(Sock);
 
-        //웹소켓 객체를 받아온다
-        stompClient = over(Sock);
-
-        // (header,callback,error)
-        stompClient.connect(
-          {
-            Authorization: `${localStorage.getItem("accessToken")}`,
-          },
-          onConnected,
-          onError
-        );
-      });
+    // (header,callback,error)
+    stompClient.connect(
+      {
+        Authorization: `${localStorage.getItem("accessToken")}`,
+      },
+      onConnected,
+      onError
+    );
   };
 
   const onConnected = () => {
@@ -67,7 +56,7 @@ function MatchupGuest() {
       connected: true,
     });
     stompClient.subscribe(
-      `/sub/games/${localStorage.getItem("roomCode")}`,
+      `/sub/games/${localStorage.getItem("roomCode")}/join`,
       onMessageReceived
     );
     //newJoin();
@@ -121,33 +110,8 @@ function MatchupGuest() {
   };
   //메세지 받았을 때 (payload 데이터가 들어옴)
   const onMessageReceived = (payload) => {
-    let payloadMessage = JSON.parse(payload.body);
-    let payloadData = JSON.parse(payloadMessage.message);
-    if (payloadData.userName !== localStorage.getItem("nickname")) {
-      console.log(payloadData.status);
-      switch (payloadData.status) {
-        case "NEWJOIN":
-          setOppData({
-            ...oppData,
-            userName: payloadData.userName,
-            avatarNum: payloadData.avatarNum,
-            connected: true,
-          });
-          ecoJoin();
-          break;
-        case "ECOJOIN":
-          setOppData({
-            ...oppData,
-            userName: payloadData.userName,
-            avatarNum: payloadData.avatarNum,
-            connected: true,
-          });
-          break;
-        case "PLAY":
-          navigate.push("/InGame");
-          localStorage.setItem("isHost", false);
-      }
-    }
+    let payloadData = JSON.parse(payload.body);
+    console.log(payloadData);
   };
   return (
     <div className="flex flex-row justify-between items-center w-280 h-160 p-5 bg-white rounded-3xl shadow-2xl">
