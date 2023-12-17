@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import axios from "axios";
 
 import avatar1 from "../assets/Char1.png";
 import avatar2 from "../assets/Char2.png";
 import avatar3 from "../assets/Char3.png";
 
 function Lobby() {
+  const navigate = useHistory();
   useEffect(() => {
     setNickname(localStorage.getItem("nickname"));
   }, []);
@@ -30,6 +32,23 @@ function Lobby() {
   const getUserinfo = () => {
     localStorage.setItem("nickname", nickname);
     localStorage.setItem("avatarNum", avatarNum);
+    axios
+      .post(
+        "https://api.yachtdice.site/api/members/nickname",
+        {
+          nickname: nickname,
+        },
+
+        {
+          headers: {
+            Authorization: `Bearer ${r.data.accessToken}`,
+          },
+        }
+      )
+      .then((r) => {
+        console.log(r.data);
+        navigate.push("/Matchup");
+      });
   };
   return (
     <div className="flex flex-col justify-evenly items-center w-80 h-160 p-5 bg-white rounded-3xl shadow-2xl">
@@ -56,15 +75,13 @@ function Lobby() {
         >
           Join
         </button>
-        <Link to="/Matchup">
-          <button
-            type="button"
-            className="flex w-40 h-10 mb-3 justify-center items-center rounded-full bg-secondary px-3 py-1.5 text-xl font-semibold leading-6 text-white shadow-sm hover:bg-secondarytHover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            onClick={getUserinfo}
-          >
-            Host
-          </button>
-        </Link>
+        <button
+          type="button"
+          className="flex w-40 h-10 mb-3 justify-center items-center rounded-full bg-secondary px-3 py-1.5 text-xl font-semibold leading-6 text-white shadow-sm hover:bg-secondarytHover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          onClick={getUserinfo}
+        >
+          Host
+        </button>
       </div>
     </div>
   );
