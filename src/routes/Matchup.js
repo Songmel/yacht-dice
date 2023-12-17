@@ -41,22 +41,22 @@ function Matchup() {
       })
       .then((r) => {
         console.log(r.data);
+        localStorage.setItem("roomCode", r.data);
+
+        let Sock = new SockJS("https://api.yachtdice.site/ws");
+
+        //웹소켓 객체를 받아온다
+        stompClient = over(Sock);
+
+        // (header,callback,error)
+        stompClient.connect(
+          {
+            Authorization: `${localStorage.getItem("accessToken")}`,
+          },
+          onConnected,
+          onError
+        );
       });
-    /*
-    let Sock = new SockJS("https://api.yachtdice.site/ws");
-
-    //웹소켓 객체를 받아온다
-    stompClient = over(Sock);
-
-    // (header,callback,error)
-    stompClient.connect(
-      {
-        Authorization: `${localStorage.getItem("accessToken")}`,
-      },
-      onConnected,
-      onError
-    );
-    */
   };
 
   const onConnected = () => {
@@ -66,8 +66,11 @@ function Matchup() {
       avatarNum: localStorage.getItem("avatarNum"),
       connected: true,
     });
-    stompClient.subscribe("/sub/games", onMessageReceived);
-    newJoin();
+    stompClient.subscribe(
+      `/sub/games/${localStorage.getItem("roomCode")}`,
+      onMessageReceived
+    );
+    //newJoin();
   };
 
   const onError = (err) => {
