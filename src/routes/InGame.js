@@ -163,7 +163,6 @@ function InGame() {
       {},
       JSON.stringify(message)
     );
-    setTurn("HOST");
   };
 
   const updateDice = (newDices) => {
@@ -214,6 +213,7 @@ function InGame() {
             connected: true,
           });
           ecoJoin();
+          setTurn("HOST");
           break;
         case "ECOJOIN":
           setOppData({
