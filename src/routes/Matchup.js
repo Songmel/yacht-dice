@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
+import axios from "axios";
 
 import { over } from "stompjs";
 import SockJS from "sockjs-client";
@@ -32,6 +33,14 @@ function Matchup() {
 
   // 소켓 연결 함수
   const connect = () => {
+    axios
+      .get("https://api.yachtdice.site/api/rooms/code", {
+        Authorization: `${localStorage.getItem("accessToken")}`,
+      })
+      .then((r) => {
+        console.log(r.data);
+      });
+    /*
     let Sock = new SockJS("https://api.yachtdice.site/ws");
 
     //웹소켓 객체를 받아온다
@@ -45,6 +54,7 @@ function Matchup() {
       onConnected,
       onError
     );
+    */
   };
 
   const onConnected = () => {
